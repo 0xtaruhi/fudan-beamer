@@ -1,0 +1,155 @@
+% beamerthemefudan.sty -- a restrained Fudan-red Beamer theme for XeLaTeX.
+%
+% Copyright 2026 Zhengyi Zhang
+% Licensed under the Apache License, Version 2.0 (see LICENSE).
+% The emblem and background artwork in resources/ derive from
+% sonnyhcl/beamerthemefdu (Apache-2.0); see NOTICE.
+%
+% Usage:  \documentclass[aspectratio=169,10pt]{beamer}
+%         \usetheme{fudan}
+% Compile with XeLaTeX (latexmk -xelatex).
+
+\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{beamerthemefudan}[2026/10/14 v1.0 Fudan red Beamer theme]
+
+% ------------------------------------------------------------------ options
+\newif\iffudan@fonts \fudan@fontstrue
+\DeclareOptionBeamer{nofonts}{\fudan@fontsfalse}
+\def\fudan@resources{resources/}
+\DeclareOptionBeamer{resources}{\def\fudan@resources{#1}}
+\ProcessOptionsBeamer
+
+% ------------------------------------------------------------------ fonts
+% Latin: Source Serif 4 (headings) / Source Sans 3 (body) / IBM Plex Mono (code)
+% CJK:   Noto Serif CJK SC (宋体, headings) / Noto Sans CJK SC (黑体, body)
+%        / LXGW WenKai (楷体, subtitles and notes; falls back to FandolKai)
+\RequirePackage{fontspec}
+\RequirePackage{xeCJK}
+\iffudan@fonts
+  \setsansfont{SourceSans3}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-Semibold,
+    ItalicFont=*-RegularIt, BoldItalicFont=*-SemiboldIt]
+  \setmainfont{SourceSerif4}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-Semibold,
+    ItalicFont=*-RegularIt, BoldItalicFont=*-SemiboldIt]
+  \setmonofont{IBMPlexMono}[Extension=.otf, UprightFont=*-Regular, BoldFont=*-SemiBold, Scale=0.88]
+  \setCJKsansfont{Noto Sans CJK SC}[BoldFont={Noto Sans CJK SC Bold}]
+  \setCJKmainfont{Noto Serif CJK SC}[BoldFont={Noto Serif CJK SC Bold}]
+  \setCJKmonofont{Noto Sans CJK SC}
+  \IfFontExistsTF{LXGW WenKai}
+    {\setCJKfamilyfont{kai}{LXGW WenKai}}
+    {\setCJKfamilyfont{kai}{FandolKai-Regular.otf}}
+\else
+  \setCJKfamilyfont{kai}{FandolKai-Regular.otf}
+\fi
+% \kai: serif italic for Latin, Kai for CJK.
+\newcommand{\kai}{\rmfamily\itshape\CJKfamily{kai}}
+\usefonttheme{professionalfonts}
+
+% ------------------------------------------------------------------ packages
+\RequirePackage{booktabs,tabularx,array}
+\RequirePackage{colortbl}
+\RequirePackage{tikz}
+\usetikzlibrary{calc}
+\RequirePackage{listings}
+
+% ------------------------------------------------------------------ colors
+\definecolor{fdred}{HTML}{9E1B32}   % Fudan red, the only accent colour
+\definecolor{ink}{HTML}{1A1A1A}     % body text
+\definecolor{muted}{HTML}{6F6E69}   % secondary text
+\definecolor{rule}{HTML}{E2E0DC}    % hairlines under frame titles
+\definecolor{paper}{HTML}{F4F3F1}   % code and box backgrounds
+
+% ------------------------------------------------------------------ base styling
+\setbeamertemplate{navigation symbols}{}
+\setbeamercolor{normal text}{fg=ink,bg=white}
+\setbeamercolor{structure}{fg=fdred}
+\setbeamercolor{alerted text}{fg=fdred}
+\setbeamerfont{frametitle}{family=\rmfamily, size=\fontsize{15}{18}, series=\bfseries}
+\setbeamertemplate{itemize item}{\color{fdred}\raisebox{0.3ex}{\rule{0.42ex}{0.42ex}}}
+\setbeamertemplate{itemize subitem}{\color{muted}\textendash}
+\setbeamertemplate{enumerate item}{\color{fdred}\rmfamily\insertenumlabel.}
+\setlength{\leftmargini}{1.1em}
+\setbeamersize{text margin left=8mm, text margin right=8mm}
+
+% Faint emblem watermark on every slide.
+\setbeamertemplate{background canvas}{%
+  \begin{tikzpicture}
+    \fill[white] (0,0) rectangle (\paperwidth,\paperheight);
+    \node[opacity=.03] at (0.86\paperwidth,0.28\paperheight)
+      {\includegraphics[width=7cm]{\fudan@resources background}};
+  \end{tikzpicture}}
+
+% Frame title: red section kicker, serif title, optional Kai subtitle, hairline.
+\setbeamertemplate{frametitle}{%
+  \begin{tikzpicture}[remember picture,overlay]
+    \node[anchor=north east] at ([xshift=-7mm,yshift=-4.2mm]current page.north east)
+      {\includegraphics[height=4.6mm]{\fudan@resources fudan-red.png}};
+  \end{tikzpicture}%
+  \vspace*{-0.5mm}%
+  {\sffamily\fontsize{6.5}{7}\selectfont\color{fdred}\insertsectionhead}\par\vspace{0.2mm}
+  {\usebeamerfont{frametitle}\color{ink}\insertframetitle}%
+  \ifx\insertframesubtitle\empty\else
+    \hspace{3mm}{\kai\small\color{muted}\insertframesubtitle}\fi
+  \par\vspace{0.8mm}{\color{rule}\rule{\linewidth}{0.5pt}}\par\vspace{-1.5mm}}
+
+\setbeamertemplate{footline}{%
+  \hbox to \paperwidth{\hspace{6mm}{\rmfamily\itshape\tiny\color{muted}\insertshorttitle}\hfill
+  {\rmfamily\tiny\color{muted}\insertframenumber}\hspace{6mm}}\vspace{3mm}}
+
+\setbeamertemplate{title page}{%
+  \vspace*{-2mm}
+  \includegraphics[height=12mm]{\fudan@resources fudan-red.png}\par\vspace{14mm}
+  {\rmfamily\bfseries\fontsize{25}{30}\selectfont\color{ink}\inserttitle}\par\vspace{4mm}
+  {\color{fdred}\rule{18mm}{1.2pt}}\par\vspace{4mm}
+  {\kai\large\color{muted}\insertsubtitle}\par\vspace{12mm}
+  {\small\color{ink}\insertauthor
+    \ifx\insertinstitute\empty\else\quad{\color{muted}|}\quad\insertinstitute\fi
+    \quad{\color{muted}|}\quad\insertdate}\vfill}
+
+% ------------------------------------------------------------------ commands
+% \partslide{kicker}{section title}{one-line description}
+% Starts a \section and emits a plain divider slide.
+\newcommand{\partslide}[3]{%
+  \section{#2}
+  \begin{frame}[plain]
+    \begin{tikzpicture}[remember picture,overlay]
+      \fill[fdred] (current page.north west) rectangle ([xshift=3mm]current page.south west);
+      \node[anchor=south west, font=\small, text=fdred] at ([xshift=16mm,yshift=4mm]current page.west) {#1};
+      \node[anchor=north west, font=\rmfamily\bfseries\fontsize{24}{28}\selectfont, text=ink]
+        at ([xshift=16mm,yshift=2mm]current page.west) {#2};
+      \draw[fdred, line width=1.2pt] ([xshift=16mm,yshift=-10mm]current page.west) -- ++(14mm,0);
+      \node[anchor=north west, text width=110mm, font=\kai\normalsize, text=muted]
+        at ([xshift=16mm,yshift=-13mm]current page.west) {#3};
+      \node[anchor=south east] at ([xshift=-8mm,yshift=8mm]current page.south east)
+        {\includegraphics[height=7mm]{\fudan@resources fudan-red.png}};
+    \end{tikzpicture}
+  \end{frame}}
+
+% \key{...}: the one-sentence takeaway placed under a frame title.
+\newcommand{\key}[1]{{\color{fdred}\rule[-0.35ex]{1.3pt}{1.1em}}\hspace{2.5mm}{\rmfamily\bfseries\large #1}\par\vspace{3mm}}
+% \best{...}: a number or phrase that deserves attention.
+\newcommand{\best}[1]{\textbf{\color{fdred}#1}}
+% \pt{lead}{detail}: bold lead word followed by muted detail.
+\newcommand{\pt}[2]{\textbf{#1}\enspace{\color{muted}#2}}
+% \hd{...}: serif heading inside a slide body.
+\newcommand{\hd}[1]{{\rmfamily\bfseries\color{ink}#1}}
+% \colhead{...}: muted table column header.
+\newcommand{\colhead}[1]{{\color{muted}#1}}
+% \src{...}: small Kai note under a table or figure.
+\newcommand{\src}[1]{\par\vspace{1.2mm}{\kai\scriptsize\color{muted}#1}}
+
+% ------------------------------------------------------------------ tables
+% booktabs rules: red top/bottom, black middle; never grey.
+\renewcommand{\arraystretch}{1.18}
+\newcolumntype{C}{>{\centering\arraybackslash}X}
+\arrayrulecolor{ink}
+\let\fudan@toprule\toprule \let\fudan@bottomrule\bottomrule
+\renewcommand{\toprule}{\arrayrulecolor{fdred}\fudan@toprule\arrayrulecolor{ink}}
+\renewcommand{\bottomrule}{\arrayrulecolor{fdred}\fudan@bottomrule\arrayrulecolor{ink}}
+
+% ------------------------------------------------------------------ code
+\lstset{basicstyle=\ttfamily\scriptsize, columns=fullflexible,
+  keywordstyle=\color{fdred}, commentstyle=\color{muted}\itshape,
+  frame=leftline, rulecolor=\color{fdred}, framesep=5pt, xleftmargin=7pt,
+  backgroundcolor=\color{paper}, aboveskip=2pt, belowskip=2pt}
+
+\endinput

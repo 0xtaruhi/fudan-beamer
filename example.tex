@@ -1,0 +1,163 @@
+% Example deck for the fudan Beamer theme.  Build: latexmk -xelatex example.tex
+\documentclass[aspectratio=169,10pt]{beamer}
+\usetheme{fudan}
+
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\title[Fudan Beamer]{复旦红 Beamer 主题}
+\subtitle{一个克制、清晰的学术与技术报告模板}
+\author{张政镒}
+\institute{复旦大学}
+\date{2026 年 10 月}
+
+\begin{document}
+
+\begin{frame}[plain]\titlepage\end{frame}
+
+\begin{frame}{内容}
+  \vspace{4mm}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.4\textwidth}
+      \renewcommand{\arraystretch}{1.75}
+      \begin{tabular}{@{}l l@{}}
+        {\rmfamily\color{fdred}一} & \textbf{设计原则} \\
+        {\rmfamily\color{fdred}二} & \textbf{版式元素} \\
+        {\rmfamily\color{fdred}三} & \textbf{使用方法} \\
+      \end{tabular}
+    \column{0.52\textwidth}
+      \vspace{2mm}
+      {\rmfamily\bfseries\large 一句话}\par\vspace{3mm}
+      {\rmfamily\normalsize 每页\textbf{\color{fdred}一个结论}，最多\textbf{\color{fdred}一张表或一张图}。}
+  \end{columns}
+\end{frame}
+
+% =====================================================================
+\partslide{第一部分}{设计原则}{少即是多：用版式突出结论，而不是堆砌信息。}
+
+\begin{frame}{三种字体，各司其职}
+  \key{宋体做标题，黑体做正文，楷体做注释}
+  \small
+  \renewcommand{\arraystretch}{1.7}
+  \begin{tabularx}{\textwidth}{@{}p{22mm} p{48mm} X@{}}
+    \toprule
+    \colhead{角色} & \colhead{中文 / 西文} & \colhead{示例} \\
+    \midrule
+    \textbf{标题} & 思源宋体 / Source Serif 4 & {\rmfamily\bfseries 确定性、并行的计算} \\
+    \textbf{正文} & 思源黑体 / Source Sans 3 & 正文 Body text 0123456789 \\
+    \textbf{注释} & 霞鹜文楷 / Source Serif 4 Italic & {\kai 数据来源与补充说明} \\
+    \textbf{代码} & IBM Plex Mono & \texttt{latexmk -xelatex} \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+\begin{frame}{一种强调色}
+  \key{复旦红只用于结论、关键数字与结构线}
+  \begin{columns}[c,onlytextwidth]
+    \column{0.46\textwidth}
+      \small
+      \begin{itemize}\setlength{\itemsep}{2.2mm}
+        \item \pt{结论句}{\textbackslash key\{\ldots\}}
+        \item \pt{关键数字}{\textbackslash best\{\ldots\}}
+        \item \pt{表格}{上下边线红色，中线黑色}
+        \item \pt{注释}{\textbackslash src\{\ldots\}，楷体}
+      \end{itemize}
+    \column{0.48\textwidth}
+      \centering
+      \begin{tikzpicture}
+        \foreach \c/\n/\x in {fdred/复旦红/0, ink/正文/1.6, muted/次要/3.2, paper/底色/4.8}
+          {\fill[\c] (\x,0) rectangle ++(1.3,1.3);
+           \node[below, font=\scriptsize, text=muted] at (\x+0.65,-0.05) {\n};}
+      \end{tikzpicture}
+  \end{columns}
+\end{frame}
+
+% =====================================================================
+\partslide{第二部分}{版式元素}{表格、图表、代码与双栏。}
+
+\begin{frame}{表格}{示例数据}
+  \key{方案 B 在三个指标上均优于方案 A}
+  \small
+  \renewcommand{\arraystretch}{1.5}
+  \begin{tabularx}{\textwidth}{@{}X *{3}{>{\centering\arraybackslash}p{28mm}}@{}}
+    \toprule
+    & \multicolumn{1}{c}{\colhead{方案 A}} & \multicolumn{1}{c}{\textbf{\color{fdred}方案 B}} & \multicolumn{1}{c}{\colhead{方案 C}} \\
+    \midrule
+    运行时间 & 120\,s & \best{18\,s} & 64\,s \\
+    峰值内存 & 2.4\,GB & \best{0.6\,GB} & 1.1\,GB \\
+    通过用例 & 41 / 50 & \best{50 / 50} & 47 / 50 \\
+    \bottomrule
+  \end{tabularx}
+  \src{示例数据，仅用于展示版式。}
+\end{frame}
+
+\begin{frame}{图表}{示例数据}
+  \key{图表与正文使用同一套颜色和字体}
+  \centering
+  \begin{tikzpicture}
+    \begin{axis}[width=0.8\textwidth, height=52mm, ybar, bar width=12pt,
+        symbolic x coords={任务 1,任务 2,任务 3,任务 4,任务 5}, xtick=data,
+        ymin=0, ymax=130, ylabel={运行时间 / s},
+        axis line style={muted!60}, tick style={muted!60}, ymajorgrids,
+        grid style={rule}, tick label style={font=\scriptsize},
+        label style={font=\scriptsize, text=muted},
+        area legend, legend style={draw=none, font=\scriptsize, at={(0.98,0.97)}, anchor=north east},
+        nodes near coords, nodes near coords style={font=\tiny}]
+      \addplot[fill=muted!45, draw=none] coordinates {(任务 1,82) (任务 2,120) (任务 3,64) (任务 4,97) (任务 5,110)};
+      \addplot[fill=fdred, draw=none] coordinates {(任务 1,12) (任务 2,18) (任务 3,9) (任务 4,15) (任务 5,16)};
+      \legend{方案 A, 方案 B}
+    \end{axis}
+  \end{tikzpicture}
+\end{frame}
+
+\begin{frame}[fragile]{代码与双栏}
+  \key{代码块左侧一条红线，底色与正文区分}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.5\textwidth}
+\begin{lstlisting}
+\documentclass[aspectratio=169]{beamer}
+\usetheme{fudan}
+\title{...}
+
+% 每页：标题 + 一句结论 + 一张表或图
+\key{一句话结论}
+\best{18 s}   % 强调数字
+\src{数据来源} % 楷体注释
+\end{lstlisting}
+    \column{0.44\textwidth}
+      \small
+      \begin{itemize}\setlength{\itemsep}{2.2mm}
+        \item \pt{标题页}{校徽、标题、红色短线}
+        \item \pt{章节页}{\textbackslash partslide}
+        \item \pt{页眉}{章节名、标题、细线}
+        \item \pt{页脚}{短标题与页码}
+      \end{itemize}
+  \end{columns}
+\end{frame}
+
+% =====================================================================
+\partslide{第三部分}{使用方法}{XeLaTeX 编译，字体均为开源字体。}
+
+\begin{frame}{开始使用}
+  \key{复制主题文件和 resources 目录，用 XeLaTeX 编译}
+  \small
+  \renewcommand{\arraystretch}{1.6}
+  \begin{tabularx}{\textwidth}{@{}p{24mm} X@{}}
+    \toprule
+    \textbf{编译} & \texttt{latexmk -xelatex example.tex} \\
+    \textbf{字体} & Source Serif 4、Source Sans 3、IBM Plex Mono（TeX Live 自带）；思源宋体 / 黑体；霞鹜文楷（缺失时回退到 Fandol 楷体） \\
+    \textbf{选项} & \texttt{nofonts}：不设置字体；\texttt{resources=<路径>}：校徽与背景所在目录 \\
+    \bottomrule
+  \end{tabularx}
+\end{frame}
+
+\begin{frame}[plain]
+  \begin{tikzpicture}[remember picture,overlay]
+    \node at ([yshift=10mm]current page.center) {\rmfamily\bfseries\fontsize{26}{30}\selectfont\color{ink}谢谢};
+    \draw[fdred, line width=1.2pt] ([xshift=-7mm,yshift=1mm]current page.center) -- ++(14mm,0);
+    \node[font=\kai\large, text=muted] at ([yshift=-7mm]current page.center) {问题与讨论};
+    \node at ([yshift=-27mm]current page.center) {\includegraphics[height=9mm]{resources/fudan-red.png}};
+  \end{tikzpicture}
+\end{frame}
+
+\end{document}
