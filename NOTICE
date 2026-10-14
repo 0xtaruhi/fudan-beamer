@@ -1,7 +1,8 @@
 fudan-beamer
 Copyright 2026 Zhengyi Zhang
 
-The Fudan University emblem (resources/fudan-red.png, recoloured to Fudan red)
+The Fudan University emblem (resources/fudan-red.pdf and resources/fudan-blue.pdf,
+vector, recoloured to Fudan red and Fudan blue)
 and the background artwork (resources/background.pdf) are taken from
 sonnyhcl/beamerthemefdu (https://github.com/sonnyhcl/beamerthemefdu),
 licensed under the Apache License, Version 2.0.

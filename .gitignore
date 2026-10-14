@@ -9,3 +9,7 @@
 *.fdb_latexmk
 *.xdv
 *.synctex.gz
+*.bbl
+*.bcf
+*.blg
+*.run.xml

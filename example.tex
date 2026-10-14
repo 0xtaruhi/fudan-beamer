@@ -1,12 +1,27 @@
-% Example deck for the fudan Beamer theme.  Build: latexmk -xelatex example.tex
+% Example deck and user guide for the fudan Beamer theme.
+% Build: latexmk -xelatex example.tex       (Fudan red)
+%        latexmk -xelatex example-blue.tex  (Fudan blue)
+\providecommand{\fudancolor}{red}
 \documentclass[aspectratio=169,10pt]{beamer}
-\usetheme{fudan}
+\usetheme[color=\fudancolor]{fudan}
 
+\usepackage{amsmath,amssymb,mathtools,bm}
 \usepackage{pgfplots}
 \pgfplotsset{compat=1.18}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric}
+\usepackage[ruled,linesnumbered,vlined]{algorithm2e}
+\SetAlCapFnt{\small\rmfamily\bfseries}
+\SetAlCapNameFnt{\small\rmfamily}
+\SetAlgorithmName{算法}{算法}{算法列表}
+\usepackage[backend=biber,style=gb7714-2015]{biblatex}
+\addbibresource{references.bib}
 
-\title[Fudan Beamer]{复旦红 Beamer 主题}
-\subtitle{一个克制、清晰的学术与技术报告模板}
+\lstdefinelanguage{fudanpython}{
+  morekeywords={def,return,for,in,if,else,import,from,as,with,while,class},
+  sensitive=true, morecomment=[l]{\#}, morestring=[b]", morestring=[b]'}
+
+\title[Fudan Beamer]{复旦 Beamer 主题}
+\subtitle{一个克制、清晰的学术与技术报告模板 \quad 使用手册}
 \author{张政镒}
 \institute{复旦大学}
 \date{2026 年 10 月}
@@ -16,29 +31,58 @@
 \begin{frame}[plain]\titlepage\end{frame}
 
 \begin{frame}{内容}
-  \vspace{4mm}
+  \vspace{3mm}
   \begin{columns}[T,onlytextwidth]
-    \column{0.4\textwidth}
-      \renewcommand{\arraystretch}{1.75}
+    \column{0.46\textwidth}
+      \renewcommand{\arraystretch}{1.6}
       \begin{tabular}{@{}l l@{}}
-        {\rmfamily\color{fdred}一} & \textbf{设计原则} \\
-        {\rmfamily\color{fdred}二} & \textbf{版式元素} \\
-        {\rmfamily\color{fdred}三} & \textbf{使用方法} \\
+        {\rmfamily\color{accent}一} & \textbf{设计原则} \\
+        {\rmfamily\color{accent}二} & \textbf{文本与列表} \\
+        {\rmfamily\color{accent}三} & \textbf{区块与定理} \\
+        {\rmfamily\color{accent}四} & \textbf{数学公式} \\
+        {\rmfamily\color{accent}五} & \textbf{表格、图片与图表} \\
       \end{tabular}
-    \column{0.52\textwidth}
-      \vspace{2mm}
-      {\rmfamily\bfseries\large 一句话}\par\vspace{3mm}
-      {\rmfamily\normalsize 每页\textbf{\color{fdred}一个结论}，最多\textbf{\color{fdred}一张表或一张图}。}
+    \column{0.46\textwidth}
+      \renewcommand{\arraystretch}{1.6}
+      \begin{tabular}{@{}l l@{}}
+        {\rmfamily\color{accent}六} & \textbf{代码与算法} \\
+        {\rmfamily\color{accent}七} & \textbf{动画与分步展示} \\
+        {\rmfamily\color{accent}八} & \textbf{参考文献} \\
+        {\rmfamily\color{accent}九} & \textbf{使用方法} \\
+      \end{tabular}
   \end{columns}
 \end{frame}
 
 % =====================================================================
 \partslide{第一部分}{设计原则}{少即是多：用版式突出结论，而不是堆砌信息。}
 
+\begin{frame}{每页一个结论}
+  \key{标题下方用一句话写出这一页要说的事}
+  \small
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+      \hd{推荐的页面结构}\par\vspace{2mm}
+      \begin{enumerate}\setlength{\itemsep}{1.6mm}
+        \item 页面标题：这一页讨论什么
+        \item \texttt{\textbackslash key\{...\}}：这一页的结论
+        \item 一张表、一张图或几条要点：结论的证据
+        \item \texttt{\textbackslash src\{...\}}：数据来源或补充说明
+      \end{enumerate}
+    \column{0.46\textwidth}
+      \hd{避免}\par\vspace{2mm}
+      \begin{itemize}\setlength{\itemsep}{1.6mm}
+        \item 一页放多张表格或大段文字
+        \item 多种强调色同时出现
+        \item 只有数据、没有结论
+      \end{itemize}
+  \end{columns}
+  \src{参考 Tufte 关于数据呈现的建议 \parencite{tufte2001visual}。}
+\end{frame}
+
 \begin{frame}{三种字体，各司其职}
   \key{宋体做标题，黑体做正文，楷体做注释}
   \small
-  \renewcommand{\arraystretch}{1.7}
+  \renewcommand{\arraystretch}{1.6}
   \begin{tabularx}{\textwidth}{@{}p{22mm} p{48mm} X@{}}
     \toprule
     \colhead{角色} & \colhead{中文 / 西文} & \colhead{示例} \\
@@ -52,20 +96,20 @@
 \end{frame}
 
 \begin{frame}{一种强调色}
-  \key{复旦红只用于结论、关键数字与结构线}
+  \key{强调色只用于结论、关键数字与结构线}
   \begin{columns}[c,onlytextwidth]
     \column{0.46\textwidth}
       \small
       \begin{itemize}\setlength{\itemsep}{2.2mm}
-        \item \pt{结论句}{\textbackslash key\{\ldots\}}
-        \item \pt{关键数字}{\textbackslash best\{\ldots\}}
-        \item \pt{表格}{上下边线红色，中线黑色}
-        \item \pt{注释}{\textbackslash src\{\ldots\}，楷体}
+        \item \pt{结论句}{\textbackslash key\{...\}}
+        \item \pt{关键数字}{\textbackslash best\{...\}}
+        \item \pt{表格}{黑色三线表，上下加粗}
+        \item \pt{注释}{\textbackslash src\{...\}，楷体}
       \end{itemize}
     \column{0.48\textwidth}
       \centering
       \begin{tikzpicture}
-        \foreach \c/\n/\x in {fdred/复旦红/0, ink/正文/1.6, muted/次要/3.2, paper/底色/4.8}
+        \foreach \c/\n/\x in {accent/强调色/0, ink/正文/1.6, muted/次要/3.2, paper/底色/4.8}
           {\fill[\c] (\x,0) rectangle ++(1.3,1.3);
            \node[below, font=\scriptsize, text=muted] at (\x+0.65,-0.05) {\n};}
       \end{tikzpicture}
@@ -73,70 +117,408 @@
 \end{frame}
 
 % =====================================================================
-\partslide{第二部分}{版式元素}{表格、图表、代码与双栏。}
+\partslide{第二部分}{文本与列表}{列表、强调与分栏。}
 
-\begin{frame}{表格}{示例数据}
-  \key{方案 B 在三个指标上均优于方案 A}
+\begin{frame}{列表}
+  \key{三种列表环境，最多嵌套两层}
   \small
-  \renewcommand{\arraystretch}{1.5}
-  \begin{tabularx}{\textwidth}{@{}X *{3}{>{\centering\arraybackslash}p{28mm}}@{}}
-    \toprule
-    & \multicolumn{1}{c}{\colhead{方案 A}} & \multicolumn{1}{c}{\textbf{\color{fdred}方案 B}} & \multicolumn{1}{c}{\colhead{方案 C}} \\
-    \midrule
-    运行时间 & 120\,s & \best{18\,s} & 64\,s \\
-    峰值内存 & 2.4\,GB & \best{0.6\,GB} & 1.1\,GB \\
-    通过用例 & 41 / 50 & \best{50 / 50} & 47 / 50 \\
-    \bottomrule
-  \end{tabularx}
-  \src{示例数据，仅用于展示版式。}
-\end{frame}
-
-\begin{frame}{图表}{示例数据}
-  \key{图表与正文使用同一套颜色和字体}
-  \centering
-  \begin{tikzpicture}
-    \begin{axis}[width=0.8\textwidth, height=52mm, ybar, bar width=12pt,
-        symbolic x coords={任务 1,任务 2,任务 3,任务 4,任务 5}, xtick=data,
-        ymin=0, ymax=130, ylabel={运行时间 / s},
-        axis line style={muted!60}, tick style={muted!60}, ymajorgrids,
-        grid style={rule}, tick label style={font=\scriptsize},
-        label style={font=\scriptsize, text=muted},
-        area legend, legend style={draw=none, font=\scriptsize, at={(0.98,0.97)}, anchor=north east},
-        nodes near coords, nodes near coords style={font=\tiny}]
-      \addplot[fill=muted!45, draw=none] coordinates {(任务 1,82) (任务 2,120) (任务 3,64) (任务 4,97) (任务 5,110)};
-      \addplot[fill=fdred, draw=none] coordinates {(任务 1,12) (任务 2,18) (任务 3,9) (任务 4,15) (任务 5,16)};
-      \legend{方案 A, 方案 B}
-    \end{axis}
-  \end{tikzpicture}
-\end{frame}
-
-\begin{frame}[fragile]{代码与双栏}
-  \key{代码块左侧一条红线，底色与正文区分}
   \begin{columns}[T,onlytextwidth]
-    \column{0.5\textwidth}
-\begin{lstlisting}
-\documentclass[aspectratio=169]{beamer}
-\usetheme{fudan}
-\title{...}
-
-% 每页：标题 + 一句结论 + 一张表或图
-\key{一句话结论}
-\best{18 s}   % 强调数字
-\src{数据来源} % 楷体注释
-\end{lstlisting}
-    \column{0.44\textwidth}
-      \small
-      \begin{itemize}\setlength{\itemsep}{2.2mm}
-        \item \pt{标题页}{校徽、标题、红色短线}
-        \item \pt{章节页}{\textbackslash partslide}
-        \item \pt{页眉}{章节名、标题、细线}
-        \item \pt{页脚}{短标题与页码}
+    \column{0.32\textwidth}
+      \hd{itemize}\par\vspace{1.5mm}
+      \begin{itemize}
+        \item 第一项
+        \item 第二项
+          \begin{itemize}
+            \item 嵌套项
+            \item 嵌套项
+          \end{itemize}
+        \item 第三项
       \end{itemize}
+    \column{0.32\textwidth}
+      \hd{enumerate}\par\vspace{1.5mm}
+      \begin{enumerate}
+        \item 准备输入
+        \item 运行程序
+          \begin{enumerate}
+            \item 单线程
+            \item 多线程
+          \end{enumerate}
+        \item 比较结果
+      \end{enumerate}
+    \column{0.32\textwidth}
+      \hd{description}\par\vspace{1.5mm}
+      \begin{description}[速度]
+        \item[速度] 运行时间
+        \item[内存] 峰值占用
+        \item[质量] 结果指标
+      \end{description}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{强调与注释}
+  \key{强调分三个层次：加粗、强调色、结论句}
+  \small
+  \begin{itemize}\setlength{\itemsep}{2.4mm}
+    \item 普通加粗：\textbf{需要读者注意的词}
+    \item \texttt{\textbackslash alert}：\alert{需要特别提醒的内容}
+    \item \texttt{\textbackslash best}：关键数字 \best{18 s}、\best{0.6 GB}
+    \item \texttt{\textbackslash pt}：\pt{要点}{后面跟一段灰色的说明}
+    \item 脚注\footnote{脚注使用灰色文字，编号为强调色。}与楷体注释 {\kai 适合放补充说明}
+  \end{itemize}
+  \src{\texttt{\textbackslash src\{...\}} 放在图表或列表下方，用于数据来源与补充说明。}
+\end{frame}
+
+\begin{frame}{分栏}
+  \key{columns 环境把一页分成左右两部分}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+      \hd{左栏：文字}\par\vspace{2mm}
+      \small
+      分栏适合"左边说明、右边证据"的结构。左栏放论点或步骤，右栏放图、表或代码。两栏宽度之和不超过 \texttt{\textbackslash textwidth}。
+      \par\vspace{3mm}
+      \begin{itemize}
+        \item \texttt{[T]}：两栏顶部对齐
+        \item \texttt{[c]}：两栏垂直居中
+        \item \texttt{onlytextwidth}：不超出正文宽度
+      \end{itemize}
+    \column{0.48\textwidth}
+      \hd{右栏：图片}\par\vspace{2mm}
+      \includegraphics[width=\linewidth]{example-image-16x9}
   \end{columns}
 \end{frame}
 
 % =====================================================================
-\partslide{第三部分}{使用方法}{XeLaTeX 编译，字体均为开源字体。}
+\partslide{第三部分}{区块与定理}{block、定理、定义与证明。}
+
+\begin{frame}{三种区块}
+  \key{区块用于需要整体框出的内容，不宜过多}
+  \small
+  \begin{columns}[T,onlytextwidth]
+    \column{0.31\textwidth}
+      \begin{block}{block}
+        普通区块，用于概念、要点或总结。
+      \end{block}
+    \column{0.31\textwidth}
+      \begin{alertblock}{alertblock}
+        提醒区块，用于注意事项或局限。
+      \end{alertblock}
+    \column{0.31\textwidth}
+      \begin{exampleblock}{exampleblock}
+        示例区块，用于例子或补充材料。
+      \end{exampleblock}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{定义与定理}
+  \key{定理环境自动编号，名称为中文}
+  \small
+  \begin{definition}[凸函数]
+    若对任意 $x, y \in \mathbb{R}^n$ 与 $\theta \in [0,1]$，有
+    $f(\theta x + (1-\theta) y) \le \theta f(x) + (1-\theta) f(y)$，则称 $f$ 为凸函数。
+  \end{definition}
+  \begin{theorem}[Jensen 不等式]
+    若 $f$ 为凸函数，$X$ 为随机变量，则 $f(\mathbb{E}[X]) \le \mathbb{E}[f(X)]$。
+  \end{theorem}
+\end{frame}
+
+\begin{frame}{引理与证明}
+  \key{proof 环境以强调色方块结尾}
+  \footnotesize
+  \begin{lemma}
+    对任意正整数 $n$，有 $\sum_{k=1}^{n} k = n(n+1)/2$。
+  \end{lemma}
+  \begin{proof}
+    对 $n$ 归纳。$n = 1$ 时两边均为 $1$。若结论对 $n$ 成立，则
+    \[
+      \sum_{k=1}^{n+1} k = \frac{n(n+1)}{2} + (n+1) = \frac{(n+1)(n+2)}{2},
+    \]
+    即结论对 $n+1$ 也成立。
+  \end{proof}
+\end{frame}
+
+% =====================================================================
+\partslide{第四部分}{数学公式}{行内公式、编号公式、多行对齐与矩阵。}
+
+\begin{frame}{行内与行间公式}
+  \key{行内公式随文排版，行间公式自动编号}
+  \small
+  质能方程 $E = mc^2$ 与欧拉恒等式 $e^{i\pi} + 1 = 0$ 可以直接写在句子里。较长的公式放在行间：
+  \begin{equation}
+    \int_{-\infty}^{\infty} e^{-x^2}\,\mathrm{d}x = \sqrt{\pi}
+  \end{equation}
+  \begin{equation}
+    \hat{\bm{\beta}} = \arg\min_{\bm{\beta}} \; \lVert \bm{y} - \bm{X}\bm{\beta} \rVert_2^2 + \lambda \lVert \bm{\beta} \rVert_1
+  \end{equation}
+\end{frame}
+
+\begin{frame}{多行对齐与分段函数}
+  \key{align 按等号对齐，cases 写分段函数}
+  \small
+  \begin{columns}[T,onlytextwidth]
+    \column{0.52\textwidth}
+      \begin{align}
+        (a+b)^2 &= (a+b)(a+b) \\
+                &= a^2 + ab + ba + b^2 \\
+                &= a^2 + 2ab + b^2
+      \end{align}
+    \column{0.44\textwidth}
+      \begin{equation}
+        |x| =
+        \begin{cases}
+          x,  & x \ge 0, \\
+          -x, & x < 0.
+        \end{cases}
+      \end{equation}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{矩阵}
+  \key{pmatrix、bmatrix 等环境排版矩阵}
+  \small
+  \begin{equation}
+    \bm{A} =
+    \begin{pmatrix}
+      a_{11} & a_{12} & \cdots & a_{1n} \\
+      a_{21} & a_{22} & \cdots & a_{2n} \\
+      \vdots & \vdots & \ddots & \vdots \\
+      a_{m1} & a_{m2} & \cdots & a_{mn}
+    \end{pmatrix},
+    \qquad
+    \bm{R}(\theta) =
+    \begin{bmatrix}
+      \cos\theta & -\sin\theta \\
+      \sin\theta & \cos\theta
+    \end{bmatrix}
+  \end{equation}
+\end{frame}
+
+% =====================================================================
+\partslide{第五部分}{表格、图片与图表}{三线表、插图、并排图与 pgfplots。}
+
+\begin{frame}{三线表}{示例数据}
+  \key{方案 B 在三个指标上均优于方案 A}
+  \small
+  \renewcommand{\arraystretch}{1.5}
+  \begin{table}
+    \caption{三种方案的运行时间、内存与通过用例}
+    \begin{tabularx}{\textwidth}{@{}X *{3}{>{\centering\arraybackslash}p{28mm}}@{}}
+      \toprule
+      & \multicolumn{1}{c}{\colhead{方案 A}} & \multicolumn{1}{c}{\textbf{\color{accent}方案 B}} & \multicolumn{1}{c}{\colhead{方案 C}} \\
+      \midrule
+      运行时间 & 120\,s & \best{18\,s} & 64\,s \\
+      峰值内存 & 2.4\,GB & \best{0.6\,GB} & 1.1\,GB \\
+      通过用例 & 41 / 50 & \best{50 / 50} & 47 / 50 \\
+      \bottomrule
+    \end{tabularx}
+  \end{table}
+  \src{示例数据，仅用于展示版式。}
+\end{frame}
+
+\begin{frame}{合并单元格}{示例数据}
+  \key{\textbackslash multicolumn 与 \textbackslash cmidrule 组织分组表头}
+  \small
+  \renewcommand{\arraystretch}{1.4}
+  \begin{table}
+    \caption{两组数据集上的结果}
+    \begin{tabularx}{\textwidth}{@{}X *{4}{>{\centering\arraybackslash}p{22mm}}@{}}
+      \toprule
+      & \multicolumn{2}{c}{\colhead{数据集 1}} & \multicolumn{2}{c}{\colhead{数据集 2}} \\
+      \cmidrule(lr){2-3}\cmidrule(l){4-5}
+      方法 & 准确率 & 时间 & 准确率 & 时间 \\
+      \midrule
+      基线 & 0.81 & 12.4\,s & 0.77 & 30.1\,s \\
+      方法甲 & 0.86 & 9.8\,s & 0.80 & 22.5\,s \\
+      方法乙 & \best{0.91} & \best{3.2\,s} & \best{0.88} & \best{7.9\,s} \\
+      \bottomrule
+    \end{tabularx}
+  \end{table}
+\end{frame}
+
+\begin{frame}{插图}
+  \key{figure 环境插入图片，题注放在图下方}
+  \begin{figure}
+    \includegraphics[width=0.52\textwidth]{example-image-16x9}
+    \caption{插图示例：\texttt{\textbackslash includegraphics} 支持 PDF、PNG、JPG}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{并排图片}
+  \key{两张图并排时用 minipage}
+  \begin{figure}
+    \begin{minipage}{0.34\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{example-image-a}
+      \par\vspace{1mm}{\small (a) 第一张图}
+    \end{minipage}\hspace{6mm}
+    \begin{minipage}{0.34\textwidth}
+      \centering
+      \includegraphics[width=\linewidth]{example-image-b}
+      \par\vspace{1mm}{\small (b) 第二张图}
+    \end{minipage}
+    \caption{并排图片示例}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{柱状图}{示例数据}
+  \key{图表与正文使用同一套颜色和字体}
+  \centering
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[width=0.8\textwidth, height=46mm, ybar, bar width=12pt,
+          symbolic x coords={任务 1,任务 2,任务 3,任务 4,任务 5}, xtick=data,
+          ymin=0, ymax=130, ylabel={运行时间 / s},
+          axis lines*=left, axis line style={muted!60}, tick style={muted!60}, ymajorgrids,
+          grid style={rule}, tick label style={font=\scriptsize},
+          label style={font=\scriptsize, text=muted},
+          legend image code/.code={\fill (0cm,-0.07cm) rectangle (0.22cm,0.11cm);},
+          legend style={draw=none, font=\scriptsize, at={(0.02,0.98)}, anchor=north west},
+          nodes near coords, nodes near coords style={font=\tiny}]
+        \addplot[fill=muted!45, draw=none] coordinates {(任务 1,82) (任务 2,120) (任务 3,64) (任务 4,97) (任务 5,110)};
+        \addplot[fill=accent, draw=none] coordinates {(任务 1,12) (任务 2,18) (任务 3,9) (任务 4,15) (任务 5,16)};
+        \legend{方案 A, 方案 B}
+      \end{axis}
+    \end{tikzpicture}
+    \caption{五个任务上两种方案的运行时间}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{折线图}{示例数据}
+  \key{折线图展示随规模变化的趋势}
+  \centering
+  \begin{figure}
+    \begin{tikzpicture}
+      \begin{axis}[width=0.8\textwidth, height=46mm, xmode=log, ymode=log,
+          xlabel={问题规模}, ylabel={运行时间 / s},
+          axis lines*=left, axis line style={muted!60}, tick style={muted!60},
+          ymajorgrids, xmajorgrids, grid style={rule},
+          tick label style={font=\scriptsize}, label style={font=\scriptsize, text=muted},
+          legend style={draw=none, font=\scriptsize, at={(0.02,0.98)}, anchor=north west}]
+        \addplot[muted, thick, mark=square*, mark size=1.6pt] coordinates {(1e3,0.8) (1e4,9) (1e5,110) (1e6,1400)};
+        \addplot[accent, thick, mark=*, mark size=1.8pt] coordinates {(1e3,0.2) (1e4,1.6) (1e5,14) (1e6,130)};
+        \legend{方案 A, 方案 B}
+      \end{axis}
+    \end{tikzpicture}
+    \caption{运行时间随问题规模的变化（对数坐标）}
+  \end{figure}
+\end{frame}
+
+\begin{frame}{TikZ 示意图}
+  \key{用 TikZ 绘制流程图，颜色取自主题}
+  \centering
+  \begin{figure}
+    \begin{tikzpicture}[node distance=9mm and 12mm, font=\small,
+        box/.style={draw=accent, fill=accent!6!white, minimum height=9mm, minimum width=24mm, align=center},
+        hl/.style={box, fill=accent, text=white},
+        arr/.style={-{Stealth[length=2mm]}, muted, line width=0.6pt}]
+      \node[box] (a) {输入数据};
+      \node[box, right=of a] (b) {预处理};
+      \node[hl, right=of b] (c) {核心算法};
+      \node[box, right=of c] (d) {结果输出};
+      \node[box, below=of c] (e) {参数配置};
+      \draw[arr] (a) -- (b); \draw[arr] (b) -- (c); \draw[arr] (c) -- (d); \draw[arr] (e) -- (c);
+    \end{tikzpicture}
+    \caption{处理流程示意}
+  \end{figure}
+\end{frame}
+
+% =====================================================================
+\partslide{第六部分}{代码与算法}{代码高亮与伪代码。}
+
+\begin{frame}[fragile]{代码}
+  \key{listings 排版代码，左侧一条强调色竖线}
+  \begin{columns}[T,onlytextwidth]
+    \column{0.48\textwidth}
+      {\small\hd{Python}}\par\vspace{1mm}
+\begin{lstlisting}[language=fudanpython]
+def fib(n):
+    """返回第 n 个斐波那契数。"""
+    a, b = 0, 1
+    for _ in range(n):
+        a, b = b, a + b
+    return a
+
+print([fib(i) for i in range(10)])
+\end{lstlisting}
+    \column{0.48\textwidth}
+      {\small\hd{C}}\par\vspace{1mm}
+\begin{lstlisting}[language=C]
+#include <stdio.h>
+
+/* 计算整数数组的和 */
+long sum(const int *a, int n) {
+    long s = 0;
+    for (int i = 0; i < n; i++)
+        s += a[i];
+    return s;
+}
+\end{lstlisting}
+  \end{columns}
+  \src{行内代码用 \texttt{\textbackslash texttt\{...\}}；含代码的页面需要加 \texttt{[fragile]} 选项。}
+\end{frame}
+
+\begin{frame}{算法}
+  \key{algorithm2e 排版伪代码}
+  \footnotesize
+  \begin{algorithm}[H]
+    \caption{二分查找}
+    \KwIn{有序数组 $a[1..n]$，目标值 $x$}
+    \KwOut{$x$ 的下标；若不存在则返回 $0$}
+    $l \gets 1$,\ $r \gets n$\;
+    \While{$l \le r$}{
+      $m \gets \lfloor (l + r) / 2 \rfloor$\;
+      \uIf{$a[m] = x$}{\Return $m$\;}
+      \uElseIf{$a[m] < x$}{$l \gets m + 1$\;}
+      \Else{$r \gets m - 1$\;}
+    }
+    \Return $0$\;
+  \end{algorithm}
+\end{frame}
+
+% =====================================================================
+\partslide{第七部分}{动画与分步展示}{用叠层控制内容出现的顺序。}
+
+\begin{frame}{逐条显示}
+  \key{\textless+-\textgreater 让列表逐条出现}
+  \small
+  \begin{itemize}[<+->]\setlength{\itemsep}{2.4mm}
+    \item 第一步：提出问题
+    \item 第二步：给出方法
+    \item 第三步：展示结果
+    \item 第四步：总结结论
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{pause、only 与 uncover}
+  \key{三种命令控制内容在哪一步出现}
+  \small
+  \texttt{\textbackslash pause}：之后的内容在下一步出现。
+  \pause
+  \par\vspace{3mm}
+  \only<2>{\texttt{\textbackslash only<2>}：只在第 2 步出现，不占位置。}%
+  \only<3->{\texttt{\textbackslash only<3->}：从第 3 步开始替换上一行。}
+  \par\vspace{3mm}
+  \uncover<3->{\texttt{\textbackslash uncover<3->}：第 3 步之前占位但不显示。}
+\end{frame}
+
+% =====================================================================
+\partslide{第八部分}{参考文献}{biblatex 与 GB/T 7714 著录格式。}
+
+\begin{frame}{引用}
+  \key{正文中用 \textbackslash cite，脚注中用 \textbackslash footcite}
+  \small
+  \begin{itemize}\setlength{\itemsep}{2.4mm}
+    \item \TeX{} 由 Knuth 设计 \cite{knuth1984texbook}，\LaTeX{} 在其上提供结构化标记 \cite{lamport1994latex}。
+    \item 本主题基于 beamer 文档类\footcite{tantau2023beamer}。
+    \item 图表使用 pgfplots 绘制 \cite{feuersanger2024pgfplots}，并遵循数据呈现的基本原则 \cite{tufte2001visual}。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}[allowframebreaks]{参考文献}
+  \printbibliography[heading=none]
+\end{frame}
+
+% =====================================================================
+\partslide{第九部分}{使用方法}{XeLaTeX 编译，字体均为开源字体。}
 
 \begin{frame}{开始使用}
   \key{复制主题文件和 resources 目录，用 XeLaTeX 编译}
@@ -144,7 +526,8 @@
   \renewcommand{\arraystretch}{1.6}
   \begin{tabularx}{\textwidth}{@{}p{24mm} X@{}}
     \toprule
-    \textbf{编译} & \texttt{latexmk -xelatex example.tex} \\
+    \textbf{编译} & \texttt{latexmk -xelatex example.tex}（参考文献需要 biber，latexmk 会自动调用） \\
+    \textbf{配色} & \texttt{\textbackslash usetheme[color=blue]\{fudan\}} 切换为复旦蓝，默认复旦红 \\
     \textbf{字体} & Source Serif 4、Source Sans 3、IBM Plex Mono（TeX Live 自带）；思源宋体 / 黑体；霞鹜文楷（缺失时回退到 Fandol 楷体） \\
     \textbf{选项} & \texttt{nofonts}：不设置字体；\texttt{resources=<路径>}：校徽与背景所在目录 \\
     \bottomrule
@@ -154,9 +537,9 @@
 \begin{frame}[plain]
   \begin{tikzpicture}[remember picture,overlay]
     \node at ([yshift=10mm]current page.center) {\rmfamily\bfseries\fontsize{26}{30}\selectfont\color{ink}谢谢};
-    \draw[fdred, line width=1.2pt] ([xshift=-7mm,yshift=1mm]current page.center) -- ++(14mm,0);
+    \draw[accent, line width=1.2pt] ([xshift=-7mm,yshift=1mm]current page.center) -- ++(14mm,0);
     \node[font=\kai\large, text=muted] at ([yshift=-7mm]current page.center) {问题与讨论};
-    \node at ([yshift=-27mm]current page.center) {\includegraphics[height=9mm]{resources/fudan-red.png}};
+    \node at ([yshift=-27mm]current page.center) {\includegraphics[height=9mm]{resources/fudan-\fudancolor.pdf}};
   \end{tikzpicture}
 \end{frame}
 
