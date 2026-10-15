@@ -85,11 +85,11 @@
 \setbeamersize{text margin left=8mm, text margin right=8mm}
 
 % Emblem watermark on every slide: placement and size of sonnyhcl/beamerthemefdu
-% (11 cm wide), at 8% opacity so it stays visible on bright screens.
+% (11 cm wide), at 1% opacity.
 \setbeamertemplate{background canvas}{%
   \begin{tikzpicture}
     \path (0,0) -- (\paperwidth,\paperheight);
-    \node[opacity=.08] at (0.8\paperwidth,0.25\paperheight)
+    \node[opacity=.01] at (0.8\paperwidth,0.25\paperheight)
       {\includegraphics[width=11cm]{\fudan@resources background}};
   \end{tikzpicture}}
 
@@ -100,11 +100,11 @@
       {\includegraphics[height=4.6mm]{\fudan@logo}};
   \end{tikzpicture}%
   \vspace*{-0.5mm}%
-  {\sffamily\fontsize{6.5}{7}\selectfont\color{accent}\insertsectionhead}\par\vspace{0.2mm}
+  {\sffamily\fontsize{6.5}{7}\selectfont\color{accent}\insertsectionhead}\par\vspace{1.5mm}
   {\usebeamerfont{frametitle}\color{ink}\insertframetitle}%
   \ifx\insertframesubtitle\empty\else
     \hspace{3mm}{\kai\small\color{muted}\insertframesubtitle}\fi
-  \par\vspace{0.8mm}{\color{rule}\rule{\linewidth}{0.5pt}}\par\vspace{-1.5mm}}
+  \par\nointerlineskip\vspace{1.6mm}{\color{rule}\rule{\linewidth}{0.5pt}}\par\vspace{3mm}}
 
 \setbeamertemplate{footline}{%
   \hbox to \paperwidth{\hspace{6mm}{\rmfamily\itshape\tiny\color{muted}\insertshorttitle}\hfill
